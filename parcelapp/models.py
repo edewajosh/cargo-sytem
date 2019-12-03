@@ -40,6 +40,19 @@ class Parcel(models.Model):
         max_length=250, help_text='Give more details of the parcel')
     receiving_agent = models.ForeignKey(
         'Agent', related_name='receiving_agent', on_delete=models.CASCADE, null=True)
+    sender = models.ForeignKey(
+        'Customer', related_name='sender_name', on_delete=models.CASCADE)
+    recepient_name = models.CharField(max_length=250)
+    recepient_number = models.CharField(max_length=250)
 
     def __str__(self):
         return self.serial_number
+
+
+class Customer(models.Model):
+    username = models.CharField(max_length=250)
+    email = models.EmailField(max_length=254)
+    phonenumber = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username
