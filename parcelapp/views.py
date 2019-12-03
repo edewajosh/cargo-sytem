@@ -1,6 +1,5 @@
-from django.shortcuts import render
+import django_filters.rest_framework
 from rest_framework import permissions
-
 from parcelapp.models import Branch, Agent, Parcel
 from parcelapp.serializers import BranchSerializer, AgentSerializer, ParcelSerializer
 from rest_framework import generics
@@ -45,16 +44,8 @@ class ParcelDetail(generics.RetrieveUpdateAPIView):
 # Customer can view the status of their cargo
 
 
-class CustomerTrackCargo(generics.RetrieveAPIView):
+class CustomerTrackCargo(generics.ListAPIView):
+    queryset = Parcel.objects.all()
     serializer_class = ParcelSerializer
-
-    def get_queryset(self):
-        """
-        This view returns an cargo object that matches the parcel serial number
-        for the currently authenticated customer
-        """
-        user = self.request.user
-        sn = self.kwargs['serial_number']
-        return Parcel.objects.filter(sender__username=user).filter(serial_number=sn)
-
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     #permission_classes = [permissions.IsAuthenticated]

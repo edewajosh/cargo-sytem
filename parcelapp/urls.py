@@ -9,7 +9,7 @@ urlpatterns = [
     path('agent/<int:pk>', views.AgentDetail.as_view()),
     path('parcel/', views.ParcelList.as_view()),
     path('parcel/<int:pk>', views.ParcelDetail.as_view()),
-    path('customer-parcel-status/<str:serial_number>',
+    path('customer-parcel-status/',
          views.CustomerTrackCargo.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
