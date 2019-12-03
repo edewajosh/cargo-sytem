@@ -37,6 +37,24 @@ class ParcelList(generics.ListCreateAPIView):
     serializer_class = ParcelSerializer
 
 
-class ParcelDetail(generics.RetrieveUpdateDestroyAPIView):
+class ParcelDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Parcel.objects.all()
     serializer_class = ParcelSerializer
+
+# Customer can view the status of their cargo
+
+
+class CustomerTrackCargo(generics.RetrieveAPIView):
+    serializer_class = ParcelSerializer
+
+    def get_queryset(self):
+        """
+        This view returns an cargo object that matches the parcel serial number
+        for the currently authenticated customer
+        """
+        user = self.request.user
+        sn = self.kwargs['serial_number']
+        return Parcel.objects.filter(sender__username=user).filter(serial_number=sn)
+
+    #permission_classes = [permissions.IsAuthenticated]
